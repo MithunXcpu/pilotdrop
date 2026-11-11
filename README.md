@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PilotDrop
 
-## Getting Started
+PilotDrop is a personal front-end prototype. The concept is that short, AI-generated TV pilots drop on social media and viewers vote on which ones get a full season. This repo is the landing page for that idea: a static catalog of fictional shows, vote clicks that stay in the browser, and a leaderboard.
 
-First, run the development server:
+The page copy is “The Audience Is the Network.” Nothing here generates video, posts to social networks, or saves votes.
+
+## What the page does
+
+The home page (`app/page.tsx`) is a single dark screen with four sections:
+
+- A hero and three counters: total votes, how many shows are marked greenlit, and how many episode records are in the catalog.
+- A grid of show cards. Each card shows genre, status, logline, episode count, and a progress bar toward that show’s vote threshold. **Vote** adds one to that show’s count.
+- A leaderboard of the top five shows by the current in-session vote count.
+- A “How It Works” section with three steps: pilots drop, people vote, and top shows get greenlit. That copy describes the concept. The app does not run those steps.
+
+The catalog lives in `app/data.ts`: ten fictional shows, each with a genre, logline, longer description, seed vote count, a greenlit threshold, a status (`voting`, `greenlit`, or `cancelled`), and a short list of pilot and teaser entries. There are no video files. Seed statuses are fixed in that file. A vote that passes the threshold does not change a show’s status.
+
+Votes are React state on the page. Refreshing the browser restores the seed counts. The header link to `/how-it-works` has no page behind it; the section is on the home page. **Get Notified** has no action wired up.
+
+## Stack
+
+- [Next.js](https://nextjs.org) 16 (App Router)
+- React 19
+- TypeScript
+- Tailwind CSS 4
+- ESLint with `eslint-config-next`
+- [Geist](https://vercel.com/font), loaded with `next/font`
+
+There is no database, no API route, and no environment variable to set.
+
+## Run it
+
+Next.js 16 expects Node.js 20.9 or later. This repo uses npm (`package-lock.json`).
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Script | What it does |
+| --- | --- |
+| `npm run dev` | Start the dev server |
+| `npm run build` | Production build |
+| `npm start` | Serve the production build |
+| `npm run lint` | Run ESLint |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project layout
 
-## Learn More
+```
+app/
+  page.tsx      Home page
+  layout.tsx    Header, footer, fonts, and metadata
+  data.ts       Show catalog and helpers
+  globals.css   Tailwind theme and a few animations
+```
 
-To learn more about Next.js, take a look at the following resources:
+`app/data.ts` also exports `getShowBySlug`, `getTopShows`, `getTotalVotes`, `getGreenlitCount`, and `getTotalEpisodes`. The UI does not have per-show routes yet.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Shows in the demo
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Show | Genre | Seed status |
+| --- | --- | --- |
+| Neural Drift | Sci-Fi | Greenlit |
+| Last Laugh | Comedy | Voting |
+| The Verdict | Drama | Greenlit |
+| Dead Signal | Thriller | Voting |
+| Hollow House | Horror | Voting |
+| Match.0 | Romance | Greenlit |
+| Built Different | Documentary | Greenlit |
+| Pixel Hearts | Animation | Voting |
+| Override | Action | Voting |
+| The Blind Spot | Mystery | Greenlit |
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Built by [Mithun](https://github.com/MithunXcpu).
